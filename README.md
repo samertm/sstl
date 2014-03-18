@@ -4,7 +4,7 @@ The Super Simple Template Language tool wraps \<p\> tags around paragraphs. It's
 
 ## Motivation
 
-I need a simple template language & html generator.
+I need a simple template language & html generator for my blog.
 
 ## Roadmap
 
