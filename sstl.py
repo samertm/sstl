@@ -12,22 +12,34 @@ def read_file(filename):
 def gen_template(text):
     result_str = ""
     index = 0
-    state = "out-of-par"
+    state = "out-of-block"
+    token = ""
     whitespace_char = re.compile(r'\s')
     newline_char = re.compile(r'\n')
     for c in text:
-        if state == "out-of-par":
-            if re.match(newline_char, c) is not None:
+        if state == "out-of-block":
+            result_str += c
+            if re.match(whitespace_char, c) is None:
+                token += c
+            elif re.match(newline_char, c):
+                if token == "START_BODY":
+                    state = "out-of-par"
+                token = ""
+        elif state == "out-of-par":
+            if re.match(newline_char, c):
                 result_str += "<br \>\n"
             elif re.match(whitespace_char, c) is None:
                 result_str += "<p>" + c
                 state = "in-par"
         elif state == "in-par":
-            if re.match(newline_char, c) is not None:
+            if re.match(newline_char, c):
                 result_str += "</p>\n"
                 state = "out-of-par"
             else:
                 result_str += c
+    # add closing </p> after input ends
+    if state == "in-par":
+        result_str += "</p>\n"
     return result_str
         
 def main(args):
